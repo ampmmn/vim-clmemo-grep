@@ -10,7 +10,7 @@ For more details, see http://0xcc.net/unimag/1/ (written in Japanese).
 Installation
 ------------
 Installation is as well as other usual plugins.
-Download zip file on github, expand it and place ~/.vim or ~/vimfiles.
+Download zip file on github, extract it and place ~/.vim or ~/vimfiles.
 
 Usage
 -----------
