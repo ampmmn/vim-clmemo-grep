@@ -307,7 +307,7 @@ function! s:setCalendarSignFunction(results, createwindow, setfocus)"{{{
 	let win_nr = winnr()
 
 	" FIXME:重複する日付のif判定文が生成されてしまう
-	let signFunc="function! g:clmemogrep_CalendarSign(day,month,year)\n"
+	let signFunc="function! g:Clmemogrep_CalendarSign(day,month,year)\n"
 	for _ in a:results
 		let [item, date] = _
 		let signFunc.= printf("if a:year==%d && a:month==%d && a:day == %d|return '@'|endif\n", date[0], date[1], date[2])
@@ -315,7 +315,7 @@ function! s:setCalendarSignFunction(results, createwindow, setfocus)"{{{
 	let signFunc.="return 0\n"
 	let signFunc.="endfunction"
 	exe signFunc
-	let g:calendar_sign="g:clmemogrep_CalendarSign"
+	let g:calendar_sign="g:Clmemogrep_CalendarSign"
 
 	" カレンダーウインドウの再表示
 	if exists(":Calendar") == 2 && exists(":CalendarH") == 2

@@ -8,6 +8,7 @@
 "
 " ----
 " history
+"	 0.0.6		2016-01-08	Change function name to starting with a capital.
 "	 0.0.5		2015-10-20	Added autoload directory.
 "	 0.0.4		2009-07-28	minor change
 "	 0.0.3		2009-03-02	rename clmemogrep -> clmemogrep
