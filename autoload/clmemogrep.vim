@@ -6,8 +6,8 @@ let s:saved_cpoptions=&cpoptions
 set cpoptions&vim
 
 " Check Env.
-if !has('python')"{{{
-	echoerr "Required Vim compiled with +python"
+if !has('python3')"{{{
+	echoerr "Required Vim compiled with +python3 or +python3/dyn"
 	finish
 endif
 if v:version < 700
@@ -24,38 +24,45 @@ function! s:python_part_init()"{{{
 	if s:clmemogrep_init != 0
 		return
 	endif
-python << END_OF_PYTHON_PART
+python3 << END_OF_PYTHON_PART
 
 
 def clmemo_search(filePath):
 	import vim,re
-
-	fenc          = vim.eval("g:clmemogrep_fileencoding")
+	
 	enc           = vim.eval("&enc")
-	end_pattern   = re.compile(vim.eval("g:clmemogrep_endpatern").decode(enc))
-	start_pattern = re.compile(vim.eval("g:clmemogrep_startpattern").decode(enc))
-	date_pattern  = re.compile(r'^(\d+?)-(\d+?)-(\d+)'.decode(enc))
-
+	end_pattern   = re.compile(vim.eval("g:clmemogrep_endpatern"))
+	start_pattern = re.compile(vim.eval("g:clmemogrep_startpattern"))
+	date_pattern  = re.compile(r'^(\d+?)-(\d+?)-(\d+)')
+	
+	year,month,day='0','0','0'
+	
+	# vim側にアイテム情報を渡す(アイテムが検索ワードを含むかどうかはvim側で判断)
 	def insertIf(_):
-		_ = _.replace(u'\\', u'\\\\').replace(u'"', ur'\"').replace(u'\n', ur'\n')
+		_ = _.replace(u'\\', u'\\\\').replace(u'"', u'\\"').replace(u'\n', u'\\n')
 		cmdline= u'_result.insertIf("%s",%s,%s,%s)' % (_, year,month,day)
 		vim.eval(cmdline.encode(enc))
 	
-	year,month,day='0','0','0'
 	cur_item=''
-	# 上位の側でファイルパスチェックは完了しているものとする
+	
 	for line in open(filePath):
-		line = line.decode(fenc)
-		# ヘッダの書式に合致する場合は日付を更新
+		
+		# 空行(=アイテム区切り)または先頭に文字列がある(=ヘッダ行の)場合
 		if end_pattern.match(line):
+			
+			# 前行までのアイテムを評価
 			insertIf(cur_item)
+			# バッファをクリア
 			cur_item = ''
+			# ヘッダ行の場合は日付を覚えておく
 			if date_pattern.match(line):
 				year,month,day = date_pattern.match(line).groups()
 			continue
 		# アイテムヘッダに合致する場合はアイテム単位での収集を開始
 		if start_pattern.match(line):
+			# 前行までのアイテムを評価
 			insertIf(cur_item)
+			# バッファを更新
 			cur_item = line.lstrip()
 			continue
 		cur_item += line.lstrip()
@@ -115,8 +122,8 @@ function! s:search(filepath, keywords,exclude,dates)"{{{
 	let _result.dates    = a:dates
 
 	call s:python_part_init()
-	python import vim
-	python clmemo_search(vim.eval("a:filepath"))
+	python3 import vim
+	python3 clmemo_search(vim.eval("a:filepath"))
 
 	if len(_result.results) == 0
 		echohl WarningMsg
@@ -339,7 +346,7 @@ endfunction"}}}
 
 " 指定したキーワードを含むアイテムの日付をcalendar上にSign表示
 function! clmemogrep#calendarSign(filepath, createwindow, ...)"{{{
-	if exists('g:calendar_version') == 0
+	if exists(":Calendar") == 0
 		echohl WarningMsg
 		echo 'calendar.vim not exists.'
 		echohl

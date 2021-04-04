@@ -2,12 +2,13 @@
 " Changelog Memo is a kind of concept that writting memo into one text file.
 " For more details, see http://0xcc.net/unimag/1/ (written in Japanse).
 " 
-" version : 0.0.5
+" version : 0.0.7
 " author : ampmmn(htmnymgw <delete>@<delete> gmail.com)
 " url    : http://d.hatena.ne.jp/ampmmn
 "
 " ----
 " history
+"	 0.0.7		2021-04-04	+python -> +python3
 "	 0.0.6		2016-01-08	Change function name to starting with a capital.
 "	 0.0.5		2015-10-20	Added autoload directory.
 "	 0.0.4		2009-07-28	minor change
