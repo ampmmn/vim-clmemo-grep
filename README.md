@@ -28,6 +28,38 @@ ChangeLogメモを検索するためのVimプラグイン
 
 ![折り畳み表示](images/fold.png)
 
+### このプラグインが想定するChangeLogメモの書式
+
+```Text
+2021-04-05  Taro Yamada <anonymous@gmail.com>
+
+	* catedory : title
+	ここに本文を書く
+	エントリの区切りは空行
+
+	* category2 : 本文は空でもよい
+
+	* category, category3 : カテゴリは複数指定可
+	こんにちは。これは本文です。
+
+
+2021-04-04  Taro Yamada <anonymous@gmail.com>
+
+	* gvim : set guifontで指定するフォントをダイアログから選択する
+	:set guifont=*<cr>
+
+	* unix : 連番を生成する -- seq <開始番号> <最後の番号>
+	例:
+	```
+	$ seq 1 3
+	1
+	2
+	3
+	```
+
+```
+
+
 
 ##  インストール方法
 
@@ -43,6 +75,7 @@ ChangeLogメモを検索するためのVimプラグイン
 |変数名|説明|
 |------|----|
 |g:clmemogrep_changelogfilepath|ChangeLogメモのファイルパス(必須) <br> (例: "~/ChangeLogMemo/ChangeLog.txt")|
+|g:clmemogrep_fileencoding|ChangeLogメモの文字エンコーディング <br> (`&encoding`と異なる場合に指定する。省略時はメモの文字エンコーディングを`&encoding`として扱う)|
 |g:clmemogrep_setfocus|結果ウインドウにフォーカスを移動するか?(1:移動する 0:移動しない) <br> デフォルト:1|
 |g:clmemogrep_fold|検索結果を折り畳み表示するか?(1:折りたたむ 0:折りたたまない) <br> デフォルト:0|
 |g:clmemogrep_showdate|検索結果にアイテムの日付を表示するか(1:する 0:しない) <br> デフォルト:0|
