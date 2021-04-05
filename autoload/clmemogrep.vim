@@ -31,6 +31,12 @@ def clmemo_search(filePath):
 	import vim,re
 	
 	enc           = vim.eval("&enc")
+	fenc          = enc
+	try:
+		fenc = vim.eval("g:clmemogrep_fileencoding")
+	except vim.error as e:
+		fenc = enc
+
 	end_pattern   = re.compile(vim.eval("g:clmemogrep_endpatern"))
 	start_pattern = re.compile(vim.eval("g:clmemogrep_startpattern"))
 	date_pattern  = re.compile(r'^(\d+?)-(\d+?)-(\d+)')
@@ -44,28 +50,32 @@ def clmemo_search(filePath):
 		vim.eval(cmdline.encode(enc))
 	
 	cur_item=''
-	
-	for line in open(filePath):
-		
-		# 空行(=アイテム区切り)または先頭に文字列がある(=ヘッダ行の)場合
-		if end_pattern.match(line):
+
+	try:
+		for line in open(filePath, "r", encoding=fenc):
 			
-			# 前行までのアイテムを評価
-			insertIf(cur_item)
-			# バッファをクリア
-			cur_item = ''
-			# ヘッダ行の場合は日付を覚えておく
-			if date_pattern.match(line):
-				year,month,day = date_pattern.match(line).groups()
-			continue
-		# アイテムヘッダに合致する場合はアイテム単位での収集を開始
-		if start_pattern.match(line):
-			# 前行までのアイテムを評価
-			insertIf(cur_item)
-			# バッファを更新
-			cur_item = line.lstrip()
-			continue
-		cur_item += line.lstrip()
+			# 空行(=アイテム区切り)または先頭に文字列がある(=ヘッダ行の)場合
+			if end_pattern.match(line):
+				
+				# 前行までのアイテムを評価
+				insertIf(cur_item)
+
+				# バッファをクリア
+				cur_item = ''
+				# ヘッダ行の場合は日付を覚えておく
+				if date_pattern.match(line):
+					year,month,day = date_pattern.match(line).groups()
+				continue
+			# アイテムヘッダに合致する場合はアイテム単位での収集を開始
+			if start_pattern.match(line):
+				# 前行までのアイテムを評価
+				insertIf(cur_item)
+				# バッファを更新
+				cur_item = line.lstrip()
+				continue
+			cur_item += line.lstrip()
+	except UnicodeError as e:
+		vim.eval('_result.reportError()')
 
 END_OF_PYTHON_PART
 	let s:clmemogrep_init = 1
@@ -108,6 +118,15 @@ function! s:tmpl.insertIf(expr,year,month,day)"{{{
 		return 1
 	endif
 endfunction"}}}
+
+
+function! s:tmpl.reportError()"{{{
+	echohl ErrorMsg
+	echo 'Invalid fileencoding error occurred during searching memo.'
+	echohl
+		
+endfunction"}}}
+
 
 function! s:search(filepath, keywords,exclude,dates)"{{{
 	if filereadable(a:filepath) == 0
