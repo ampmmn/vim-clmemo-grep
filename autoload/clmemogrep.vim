@@ -379,6 +379,45 @@ function! clmemogrep#calendarSign(filepath, createwindow, ...)"{{{
 endfunction
 "}}}
 
+" クリップボードの内容をエントリとして追加
+function! clmemogrep#importClipboard(filepath)
+
+	if filereadable(a:filepath) == 0
+		return
+	endif
+
+	let text = @*
+	let lines = split(text, "\n", 1)
+
+	" 末尾の空行を除去
+	while len(lines) > 0
+		if lines[len(lines)-1] == ""
+			call remove(lines, len(lines)-1)
+		else
+			break
+		endif
+	endwhile
+
+	" バッファを開く
+	call execute("silent! edit ". a:filepath)
+
+	let datestr = strftime("%X")
+
+	" エントリヘッダ
+	call append(1, "")
+	call append(2, "\t* imported : " . datestr)
+
+	" 本体
+	let i = 3
+	for line in lines
+		let line = substitute(line, "^[ \t]*", "", "")
+		let line = "\t" . line
+		call append(i, line)
+		let i = i + 1
+	endfor
+
+endfunction
+
 " ChangeLogメモを別のウインドウに開く。既に開かれている場合は何もしない
 function! s:openFile(filepath, dir)"{{{
 	" a:filepathを表示しているウインドウがなければ、ウインドウを作成

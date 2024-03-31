@@ -103,6 +103,9 @@ command! -nargs=* CLMemoGrepReverse call clmemogrep#grep(expand(g:clmemogrep_cha
 " 指定したキーワードを含むエントリの日付をカレンダー上に表示
 command -nargs=* CLMemoCalendarSign call clmemogrep#calendarSign(expand(g:clmemogrep_changelogfilepath),1, <f-args>)
 
+" クリップボードの内容をエントリとして追記
+command -nargs=0 CLMemoImportClipboard call clmemogrep#importClipboard(expand(g:clmemogrep_changelogfilepath))
+
 "}}}
 
 
