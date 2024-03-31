@@ -2,87 +2,94 @@
 
 [README in English](README.md)
 
-## $B35MW(B
+## 概要
 
-ChangeLog$B%a%b$r8!:w$9$k$?$a$N(BVim$B%W%i%0%$%s(B
+ChangeLogメモを検索するためのVimプラグイン
 
-ChangeLog$B%a%b$K$D$$$F$O(B  http://0xcc.net/unimag/1/ $B$r;2>H$N$3$H(B
+ChangeLogメモについては  http://0xcc.net/unimag/1/ を参照のこと
 
-ChangeLog$B%a%b$H8F$VC10l$N%F%-%9%H%U%!%$%k$r%-!<%o!<%I8!:w$7!"7k2L$r5-;vC10L$G8!:w$9$k$3$H$,$G$-$k!#(B  
-$B2<5-$N$h$&$JF0:n(B
+ChangeLogメモと呼ぶ単一のテキストファイルをキーワード検索し、結果を記事単位で検索することができる。  
+下記のような動作
 
 ![](image/intro.gif)
 
-## $B;H$$J}(B
+上記は説明のため、`CLMemoGrep`コマンドを直接タイプしているが、普段使いで毎回コマンド名をタイプするのは手間なので、何らかのキーにマップして使うが吉。  
+自分は`,`→`c`と打ったら検索できるようにしている。(下記)
 
-### $B%$%s%9%H!<%k(B
+```
+noremap ,c :CLMemoGrep<space>
+```
 
-$BIaDL$N(BVim$B%W%i%0%$%s$N$h$&$K!"(B`~/.vim`(Windows$B4D6-$J$i(B`~/vimfiles`)$B$KG[CV$9$k!#(B
+## 使い方
 
-### $B%3%^%s%I(B
+### インストール
 
-$B%W%i%0%$%s$r%$%s%9%H!<%k$9$k$H!"2<5-$N%3%^%s%I$,;H$($k$h$&$K$J$k!#(B
+普通のVimプラグインのように、`~/.vim`(Windows環境なら`~/vimfiles`)に配置する。
+
+### コマンド
+
+プラグインをインストールすると、下記のコマンドが使えるようになる。
 
 `CLMemoGrep` / `CLMemoGrepReverse` / `CLMemoCalendarSign`
 
 - `CLMemoGrep`
-  -  $B;XDj$7$?%-!<%o!<%I$G(BChangeLog$B%a%b%U%!%$%k$N8!:w$r9T$&!#8!:w7k2L$r@lMQ$N%&%$%s%I%&$KI=<($9$k(B
+  -  指定したキーワードでChangeLogメモファイルの検索を行う。検索結果を専用のウインドウに表示する
 ```
 :CLMemoGrep keyword1 keyword2 ...
 ```
 
 - `CLMemoGrepReverse`
-    `CLMemoGrep`$B$N7k2L$r5U=g$KI=<($9$k!#(B
+    `CLMemoGrep`の結果を逆順に表示する。
 ```
 :CLMemoGrepReverse keyword1 keyword2 ...
 ```
 
 - `CLMemoCalendarSign`
-  -  `[calendar-vim](https://github.com/mattn/calendar-vim) $B$,F~$C$F$$$k>l9g$O!"8!:w$K%R%C%H$7$?5-;v$,B8:_$9$kF|IU$r%+%l%s%@!<>e$G6/D4I=<($9$k!#(B
+  -  `[calendar-vim](https://github.com/mattn/calendar-vim) が入っている場合は、検索にヒットした記事が存在する日付をカレンダー上で強調表示する。
 
 ```
 :CLMemoGrepCalendarSign keyword1 keyword2 ...
 ```
 
 ![](image/sign.png)
-- $B5-;v$,B8:_$9$kF|IU$K!V(B@$B!W$,IU$/(B
+- 記事が存在する日付に「@」が付く
 
-### $B$[$+(B
+### ほか
 
-[calendar-vim](https://github.com/mattn/calendar-vim)$B$r;H$C$F$$$k>l9g!"2<5-$rDj5A$7$F$*$/$H!"%+%l%s%@!<$NF|IU$r%/%j%C%/$9$k$H!"(BChangeLog$B%a%b$NEv3:F|IU$K%8%c%s%W$G$-$k(B
+[calendar-vim](https://github.com/mattn/calendar-vim)を使っている場合、下記を定義しておくと、カレンダーの日付をクリックすると、ChangeLogメモの当該日付にジャンプできる
 
 ```
 let g:calendar_action='CalendarActionCLMemo'
 ```
 
-### $BJQ?t(B
+### 変数
 
 - `g:clmemogrep_changelogfilepath`
-  - ChangeLog$B%a%b$N%U%!%$%k%Q%9$r;XDj$9$k(B
+  - ChangeLogメモのファイルパスを指定する
 
 - `g:clmemogrep_fileencoding`
-  - ChangeLog$B%a%b$N%(%s%3!<%G%#%s%0$r;XDj$9$k(B($B;XDj$,$J$$>l9g$O(B`&enc`$B$HF1$8$H$_$J$9(B)
+  - ChangeLogメモのエンコーディングを指定する(指定がない場合は`&enc`と同じとみなす)
 
 - `g:clmemogrep_setfocus` (1 or 0)
-  - $B8!:w$r<B9T$7$?$H$-%U%)!<%+%9$r7k2L%&%$%s%I%&$K0\F0$9$k$+$I$&$+$r;XDj$9$k(B
+  - 検索を実行したときフォーカスを結果ウインドウに移動するかどうかを指定する
 
 - `g:clmemogrep_fold` (1 or 0)
-  - $B8!:w7k2L%&%$%s%I%&$KI=<($9$k7k2L$r@^$j$?$?$`(B(fold)$B$9$k$+$I$&$+$r;XDj$9$k(B
+  - 検索結果ウインドウに表示する結果を折りたたむ(fold)するかどうかを指定する
 
 - `g:clmemogrep_showheader` (1 or 0)
-  - $B8!:w7k2L%&%$%s%I%&$K8!:w7k2L$N7o?t$rI=<($9$k$+$I$&$+$r;XDj$9$k(B
+  - 検索結果ウインドウに検索結果の件数を表示するかどうかを指定する
 
 - `g:clmemogrep_showdate` (1 or 0)
-  - $B8!:w7k2L$K5-;v$NF|IU$rI=<($9$k$+$I$&$+$r;XDj$9$k(B
+  - 検索結果に記事の日付を表示するかどうかを指定する
 
 - `g:clmemogrep_Split`
-  - $B8!:w7k2L%&%$%s%I%&$NJ,3dJ}K!$r;XDj$9$k(B
-    - '' : $B?eJ?J,3d(B
-    - `v' : $B?bD>J,3d(B
+  - 検索結果ウインドウの分割方法を指定する
+    - '' : 水平分割
+    - `v' : 垂直分割
 
-## $BI,MW$J$b$N(B
+## 必要なもの
 
-- Vim$B$O(B`+python3/dyn' $B$,M-8z$G$"$k$3$H(B
-- Vim$B$+$i(BPython3$B$,;H$($k$h$&$K$J$C$F$$$k$3$H(B
+- Vimは`+python3/dyn' が有効であること
+- VimからPython3が使えるようになっていること
 
 

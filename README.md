@@ -38,7 +38,7 @@ Once this installation is done, you can use the following commands.
 ```
 
 - `CLMemoCalendarSign`
-  -  is same as CLMemoGrep too. And the result is marked on the calendar if [calendar-vim](https://github.com/mattn/calendar-vim) is installed.
+  -  searchs for the given words in the 'Changelog Memo' file. The result is marked on the calendar if [calendar-vim](https://github.com/mattn/calendar-vim) is installed.
 
 ```
 :CLMemoGrepCalendarSign keyword1 keyword2 ...
