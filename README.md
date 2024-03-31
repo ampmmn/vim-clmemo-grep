@@ -1,5 +1,7 @@
 # vim-clmemo-grep
 
+[README in Japsnese](README-ja.md)
+
 ## Description
 
 A vim plugin for grepping 'Changelog Memo'.
@@ -8,12 +10,14 @@ For more details, see http://0xcc.net/unimag/1/ (written in Japanese).
 
 ![](image/intro.gif)
 
-## Installation
+## Getting Started
+
+### Installation
 
 Installation is as well as other usual plugins.
 Download zip file on github, extract it and place ~/.vim or ~/vimfiles.
 
-## Usage
+### Usage
 
 Once this installation is done, you can use the following commands.
 
@@ -40,7 +44,7 @@ Once this installation is done, you can use the following commands.
 :CLMemoGrepCalendarSign keyword1 keyword2 ...
 ```
 
-## Variables
+### Variables
 
 - `g:clmemogrep_changelogfilepath`
   - Specifies file path of the ChanegLog memo.
